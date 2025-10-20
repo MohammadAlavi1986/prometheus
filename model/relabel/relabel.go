@@ -147,6 +147,11 @@ func (c *Config) Validate(nameValidationScheme model.ValidationScheme) error {
 		// Design escaping mechanism to allow that, once valid use case appears.
 		return c.NameValidationScheme.IsValidLabelName(value)
 	}
+	if c.NameValidationScheme == model.LegacyValidation {
+		isValidLabelNameWithRegexVarFn = func(value string) bool {
+			return relabelTargetLegacy.MatchString(value)
+		}
+	}
 	if c.Action == Replace && varInRegexTemplate(c.TargetLabel) && !isValidLabelNameWithRegexVarFn(c.TargetLabel) {
 		return fmt.Errorf("%q is invalid 'target_label' for %s action", c.TargetLabel, c.Action)
 	}

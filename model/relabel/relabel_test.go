@@ -794,6 +794,22 @@ func TestRelabelValidate(t *testing.T) {
 		},
 		{
 			config: Config{
+				Action:               LabelMap,
+				Regex:                MustNewRegexp("__meta_kubernetes_service_label_(.+)"),
+				Replacement:          DefaultRelabelConfig.Replacement,
+				NameValidationScheme: model.LegacyValidation,
+			},
+		},
+		{
+			config: Config{
+				Action:               LabelMap,
+				Regex:                MustNewRegexp("__meta_kubernetes_service_label_(.+)"),
+				Replacement:          "mapped_${1}_label",
+				NameValidationScheme: model.LegacyValidation,
+			},
+		},
+		{
+			config: Config{
 				Action:               Lowercase,
 				Replacement:          DefaultRelabelConfig.Replacement,
 				TargetLabel:          "${3}", // Fails with legacy validation
